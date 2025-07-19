@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,7 +12,9 @@ import { Loader2, Truck } from "lucide-react";
 
 export default function AuthForm() {
   const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("signin");
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -44,8 +47,9 @@ export default function AuthForm() {
     } else {
       toast({
         title: "Account created successfully!",
-        description: "Welcome to E-Truck Transport System",
+        description: "Please sign in with your new account",
       });
+      setActiveTab("signin");
     }
 
     setLoading(false);
@@ -75,6 +79,7 @@ export default function AuthForm() {
         title: "Welcome back!",
         description: "Successfully signed in",
       });
+      navigate("/");
     }
 
     setLoading(false);
@@ -95,7 +100,7 @@ export default function AuthForm() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="signin" className="w-full">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="signin">Sign In</TabsTrigger>
               <TabsTrigger value="signup">Create Account</TabsTrigger>
